@@ -1,7 +1,7 @@
 import Home from "./pages/Home";
 import React, { useContext, useEffect, useState } from "react";
 // import Navigate from './components/Navbar';
-import MyBookingIn from "./components/MyBookingIn";
+// import MyBookingIn from "./components/MyBookingIn";
 import AddProperty from "./components/AddProperty";
 import HomeOwner from "./components/HomeOwner";
 // import listData from "./assets/datas/data";
@@ -9,7 +9,7 @@ import Profile from "./components/Profile";
 import InvoiceOwner from "./components/InvoiceOwner";
 // import HomeLogin from './pages/HomeLogin';
 import MyBooking from "./components/MyBooking";
-import MyBookingNext from "./components/MyBookingNext";
+// import MyBookingNext from "./components/MyBookingNext";
 import Invoice from "./components/Invoice";
 import DetailProperty from "./components/DetailProperty";
 import MyBookingTenant from "./components/MyBookingTenant";
@@ -93,13 +93,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/profile/" element={<Profile />} />
             <Route path="/mybooking/:id" element={<MyBooking />} />
-            <Route path="/mybookingnext" element={<MyBookingNext />} />
             <Route path="/history" element={<Invoice />} />
             <Route path="/mybookingtenant" element={<MyBookingTenant/>} />
             <Route path="/detail/:id" element={<DetailProperty />} />
             <Route path="/add-property/" element={<AddProperty />} />
             <Route path="/index-owner/" element={<HomeOwner />} />
-            <Route path="/booking-in/" element={<MyBookingIn />} />
             <Route path="/home-owner" element={<HomeOwner />} />
             <Route path="/invoice-owner" element={<InvoiceOwner />} />
           </Routes>
