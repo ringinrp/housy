@@ -35,6 +35,7 @@ type User struct {
 	Address    string    `json:"addres" gorm:"type: varchar(225)"`
 	Gender     string    `json:"gender" gorm:"type: varchar(225)"`
 	Phone      string    `json:"phone" gorm:"type: varchar(225)"`
+	Image       string         `json:"image" gorm:"type: varchar(255)"`
 	CreatedAt  time.Time `json:"-"`
 	UpdatedAt  time.Time `json:"-"`
 }

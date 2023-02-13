@@ -18,6 +18,7 @@ function Content() {
 
     return response.data.data;
   });
+  console.log(houses)
   // const tol = houses.id
   // console.log(tol)
 
@@ -30,6 +31,7 @@ function Content() {
       >
         <div className="row row-cols-3 bg">
           {houses?.map((value, id) => {
+            console.log("Hallo",value)
             return (
               <div className="p-3 bg">
                 <Card key={id} className="p-2 bg-white">

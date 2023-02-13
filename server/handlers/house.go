@@ -1,14 +1,19 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	housesdto "housy/dto/house"
 	dto "housy/dto/result"
 	"housy/models"
 	"housy/repositories"
 	"net/http"
+	"os"
 	"strconv"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 	"gorm.io/datatypes"
@@ -34,7 +39,7 @@ func (h *handlerHouse) FindHouses(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for i, p := range houses {
-		houses[i].Image = path_file + p.Image
+		houses[i].Image = p.Image
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -68,8 +73,8 @@ func (h *handlerHouse) CreateHouse(w http.ResponseWriter, r *http.Request) {
 
 	// Get dataFile from midleware and store to filename variable here ...
 
-	dataContex := r.Context().Value("dataFile") // add this code
-	filename := dataContex.(string)             // add this code
+	// dataContex := r.Context().Value("dataFile") // add this code
+	// filename := dataContex.(string)             // add this code
 
 	price, _ := strconv.Atoi(r.FormValue("price"))
 	Bedroom, _ := strconv.Atoi(r.FormValue("Bedroom"))
@@ -84,9 +89,9 @@ func (h *handlerHouse) CreateHouse(w http.ResponseWriter, r *http.Request) {
 		Area:        r.FormValue("area"),
 		Amenities:   datatypes.JSON(r.FormValue("amenities")),
 		// Image:       r.FormValue("image"),
-		Bedroom:     Bedroom,
-		Price:       price,
-		Bathroom:    Bathroom,
+		Bedroom:  Bedroom,
+		Price:    price,
+		Bathroom: Bathroom,
 	}
 
 	validation := validator.New()
@@ -96,6 +101,22 @@ func (h *handlerHouse) CreateHouse(w http.ResponseWriter, r *http.Request) {
 		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
 		return
+	}
+
+	var ctx = context.Background()
+	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+	var API_KEY = os.Getenv("API_KEY")
+	var API_SECRET = os.Getenv("API_SECRET")
+	// get image filepath
+	dataContex := r.Context().Value("dataFile")
+	filepath := dataContex.(string)
+	// Add your Cloudinary credentials ...
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+
+	// Upload file to Cloudinary ...
+	resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "uploads"})
+	if err != nil {
+		fmt.Println(err.Error())
 	}
 
 	house := models.House{
@@ -109,7 +130,7 @@ func (h *handlerHouse) CreateHouse(w http.ResponseWriter, r *http.Request) {
 		Bathroom:    request.Bathroom,
 		Description: request.Description,
 		Area:        request.Area,
-		Image:       filename,
+		Image:       resp.SecureURL,
 	}
 
 	// err := mysql.DB.Create(&product).Error
@@ -145,6 +166,14 @@ func (h *handlerHouse) DeleteHouse(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+	propertyGet, err := h.HouseRepository.GetHouse(data.ID)
+	propertyGet.Image = os.Getenv("PATH_FILE") + propertyGet.Image
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
 		return
 	}

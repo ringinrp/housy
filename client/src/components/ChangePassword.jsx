@@ -30,10 +30,9 @@ export default function ChangePassword(props) {
       if (password.new_password != password.confirm_password) {
         return alert("new password and confirmation do not match!!!");
       }
-
       alert("successfuly change password!"); // navigate("/product-admin");
 
-      navigate("/");
+      navigate("/index-owner");
     } catch (error) {
       console.log(error);
     }
