@@ -6,6 +6,7 @@ import (
 	"housy/pkg/mysql"
 	"housy/routes"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/handlers" // import this package ...
 	"github.com/gorilla/mux"
@@ -40,9 +41,11 @@ func main() {
 	var AllowedMethods = handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS", "PATCH", "DELETE"})
 	var AllowedOrigins = handlers.AllowedOrigins([]string{"*"})
 
-	var port = "5000"
-	fmt.Println("server running localhost:" + port)
-
-	// Embed the setup allowed in 2 parameter on this below code ...
-	http.ListenAndServe("localhost:"+port, handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
+	var port = os.Getenv("PORT") 
+	fmt.Println("server running online:" + port) 
+	
+	// Embed the setup allowed in 2 parameter on this below code ... 
+	http.ListenAndServe(":"+port, handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r)) 
+	fmt.Println("server running localhost:5000") 
+	http.ListenAndServe(":"+port, r)   
 }
