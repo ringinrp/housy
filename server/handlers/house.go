@@ -19,7 +19,10 @@ import (
 	"gorm.io/datatypes"
 )
 
-var path_file = "http://localhost:5000/uploads/"
+var ctx = context.Background()
+var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+var API_KEY = os.Getenv("API_KEY")
+var API_SECRET = os.Getenv("API_SECRET")
 
 type handlerHouse struct {
 	HouseRepository repositories.HouseRepository
@@ -61,7 +64,6 @@ func (h *handlerHouse) GetHouse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	house.Image = path_file + house.Image
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponseHouse(house)}
@@ -103,10 +105,6 @@ func (h *handlerHouse) CreateHouse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var ctx = context.Background()
-	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
-	var API_KEY = os.Getenv("API_KEY")
-	var API_SECRET = os.Getenv("API_SECRET")
 	// get image filepath
 	dataContex := r.Context().Value("dataFile")
 	filepath := dataContex.(string)
