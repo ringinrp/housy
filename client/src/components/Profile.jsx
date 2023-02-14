@@ -9,7 +9,7 @@ import Name from "../assets/images/IP.png";
 import Ema from "../assets/images/Email.png";
 import Phone from "../assets/images/Phone.png";
 import Place from "../assets/images/Tendant.png";
-import Robin from "../assets/images/robin.jpg";
+import Robin from "../assets/images/wowo.jpeg";
 import Ad from "../assets/images/Lock.jpg";
 import G from "../assets/images/Gender.png";
 import Password from "../assets/images/Pass.png";
@@ -17,7 +17,7 @@ import { UserContext } from "../context/userContext";
 import { useState } from "react";
 // import home from "../pages/Home";
 // import { Pass } from "react-bootstrap-icons";
-import robin from "../assets/images/robin.jpg"
+import robin from "../assets/images/wowo.jpeg"
 
 import { useQuery } from "react-query";
 import { API } from "../config/api";
